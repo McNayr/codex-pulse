@@ -2,6 +2,11 @@
 
 A tiny operating system for Codex sessions that forget less and drift less.
 
+If you use Codex across multiple projects, Pulse gives each session a written
+startup path, a current-state map, and a shutdown ritual. After five minutes,
+you should be able to answer: what exists, what is true now, what should happen
+next, and what should not be assumed.
+
 Codex is very good at working. Humans are very good at saying, "quick thing,"
 then opening seventeen tabs, changing three services, and trusting vibes as a
 state-management strategy.
@@ -74,6 +79,18 @@ Codex should read:
 
 Then it should ask what to resume, unless you already named the project.
 
+## Prerequisites
+
+- Codex CLI or another Codex environment that can read local files and run shell
+  commands.
+- A Unix-like shell for the included scripts.
+- `rg` is recommended for the self-test and release scans.
+- Git is recommended if you want Pulse to act as a clean reference baseline.
+
+Pulse is just files and small shell scripts. There is no daemon, database, or
+ritual sacrifice. If `./bin/pulse` prints the startup files and project briefs,
+the basic setup works.
+
 ## Use It In Your Own Project
 
 The simplest setup is to keep Pulse next to the projects it tracks:
@@ -95,6 +112,24 @@ That creates a project brief under `projects/` and handoff files in your
 project folder. Fill in the brief, then add the project to `MISSION_BOARD.md`.
 
 Now future Codex sessions have a map instead of a haunted attic.
+
+## Adopt It In An Existing Project
+
+Minimum viable adoption:
+
+1. create `CURRENT_STATE.md`
+2. create `SESSION_SAVE.md` or `RESUME.md`
+3. create `TODO.md`
+4. create `CHRONOLOGY.md`
+5. add a Pulse project brief under `projects/`
+6. add the project to `MISSION_BOARD.md`
+
+Use `SESSION_SAVE.md` when you want a per-session handoff. Use `RESUME.md` when
+the project already has one durable restart file and you want to keep that
+convention.
+
+See [projects/example-app.md](./projects/example-app.md) and
+[examples/example-app](./examples/example-app) for a complete fictional example.
 
 ## What Makes It Useful
 
@@ -131,6 +166,13 @@ button is misaligned.
 Use specialists when they reduce risk or rework. Keep the main session
 responsible for integration.
 
+Pulse does not ship agent definitions. The Codex subagent catalog used while
+developing Pulse came from
+[VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents).
+If you want a broad specialist-agent library, start there and follow that
+project's installation instructions. Credit to the VoltAgent contributors for
+the catalog.
+
 ## Repository Layout
 
 - `bin/pulse`: portable startup command
@@ -143,6 +185,7 @@ responsible for integration.
 - `DRIFT_DETECTION.md`: stop-and-realign rules
 - `AGENT_GUIDE.md`: simple agent usage policy
 - `projects/`: project briefs
+- `examples/`: fictional complete example projects
 - `templates/`: starter docs for projects
 
 ## Who This Is For

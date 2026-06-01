@@ -26,6 +26,11 @@ check_file "$ROOT/AGENT_GUIDE.md"
 check_file "$ROOT/bin/pulse"
 check_file "$ROOT/scripts/new_project.sh"
 check_file "$ROOT/projects/example-app.md"
+check_file "$ROOT/examples/example-app/README.md"
+check_file "$ROOT/examples/example-app/CURRENT_STATE.md"
+check_file "$ROOT/examples/example-app/SESSION_SAVE.md"
+check_file "$ROOT/examples/example-app/TODO.md"
+check_file "$ROOT/examples/example-app/CHRONOLOGY.md"
 check_file "$ROOT/templates/PROJECT_BRIEF_TEMPLATE.md"
 check_file "$ROOT/templates/CURRENT_STATE_TEMPLATE.md"
 check_file "$ROOT/templates/SESSION_SAVE_TEMPLATE.md"
@@ -44,19 +49,36 @@ else
 fi
 
 tmpdir="$(mktemp -d)"
-if "$ROOT/scripts/new_project.sh" test-project "$tmpdir/test-project" >/dev/null; then
+self_test_name="pulse-self-test-$$"
+self_test_brief="$ROOT/projects/$self_test_name.md"
+if "$ROOT/scripts/new_project.sh" "$self_test_name" "$tmpdir/test-project" >/dev/null; then
   pass "new_project command executed"
 else
   fail "new_project command failed"
 fi
 
-check_file "$ROOT/projects/test-project.md"
+check_file "$self_test_brief"
 check_file "$tmpdir/test-project/CURRENT_STATE.md"
 check_file "$tmpdir/test-project/SESSION_SAVE.md"
 check_file "$tmpdir/test-project/TODO.md"
 check_file "$tmpdir/test-project/CHRONOLOGY.md"
-rm -f "$ROOT/projects/test-project.md"
+rm -f "$self_test_brief"
 rm -rf "$tmpdir"
+
+overwrite_tmpdir="$(mktemp -d)"
+printf 'do not overwrite\n' > "$overwrite_tmpdir/CURRENT_STATE.md"
+if "$ROOT/scripts/new_project.sh" "pulse-overwrite-test-$$" "$overwrite_tmpdir" >/dev/null 2>&1; then
+  fail "new_project allowed overwrite"
+  rm -f "$ROOT/projects/pulse-overwrite-test-$$.md"
+else
+  pass "new_project refuses to overwrite existing handoff files"
+fi
+if rg -q 'do not overwrite' "$overwrite_tmpdir/CURRENT_STATE.md"; then
+  pass "overwrite guard preserved existing file"
+else
+  fail "overwrite guard did not preserve existing file"
+fi
+rm -rf "$overwrite_tmpdir"
 
 if rg -n '/home/[[:alnum:]_-]+|/Users/[[:alnum:]_.-]+|C:\\Users\\[[:alnum:]_.-]+' "$ROOT" >/dev/null 2>&1; then
   fail "absolute user path scan matched"

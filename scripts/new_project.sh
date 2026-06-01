@@ -31,6 +31,19 @@ fi
 
 mkdir -p "$project_root"
 
+for target in \
+  "$project_root/CURRENT_STATE.md" \
+  "$project_root/SESSION_SAVE.md" \
+  "$project_root/TODO.md" \
+  "$project_root/CHRONOLOGY.md"
+do
+  if [ -e "$target" ]; then
+    printf 'Refusing to overwrite existing file: %s\n' "$target" >&2
+    printf 'Move it, rename it, or create the project scaffold in an empty directory.\n' >&2
+    exit 1
+  fi
+done
+
 cp "$ROOT/templates/PROJECT_BRIEF_TEMPLATE.md" "$brief"
 cp "$ROOT/templates/CURRENT_STATE_TEMPLATE.md" "$project_root/CURRENT_STATE.md"
 cp "$ROOT/templates/SESSION_SAVE_TEMPLATE.md" "$project_root/SESSION_SAVE.md"
