@@ -1,0 +1,12 @@
+.DS_Store
+*.swp
+*.swo
+*.tmp
+*.log
+.env
+.env.*
+node_modules/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

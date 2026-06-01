@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+printf '\nCodex Pulse\n'
+printf '===========\n\n'
+
+printf 'Root: %s\n\n' "$ROOT"
+
+printf 'Default behavior:\n'
+printf '  - Open Pulse control files\n'
+printf '  - Inspect active project briefs\n'
+printf '  - Summarize likely resume candidates\n'
+printf '  - Ask what to resume or whether to start something new\n\n'
+
+printf 'Open these first:\n'
+printf '  1. %s\n' "$ROOT/START_HERE.md"
+printf '  2. %s\n' "$ROOT/MISSION_BOARD.md"
+printf '  3. %s\n' "$ROOT/WORKFLOW_RULES.md"
+printf '  4. %s\n\n' "$ROOT/SESSION_STARTUP.md"
+
+printf 'Project briefs:\n'
+if find "$ROOT/projects" -maxdepth 1 -type f -name '*.md' ! -name '_template.md' | sort | grep -q .; then
+  find "$ROOT/projects" -maxdepth 1 -type f -name '*.md' ! -name '_template.md' | sort | while read -r brief; do
+    printf '  - %s\n' "$brief"
+  done
+else
+  printf '  - none yet; create one from %s\n' "$ROOT/templates/PROJECT_BRIEF_TEMPLATE.md"
+fi
+
+printf '\nRecovery rule:\n'
+printf '  Pulse -> project brief -> current state -> session save -> todo -> chronology -> runbook\n\n'
+
+printf 'Suggested next command:\n'
+printf "  sed -n '1,180p' '%s/START_HERE.md'\n\n" "$ROOT"
