@@ -9,6 +9,7 @@ Use this before publishing a public release.
 - [ ] `projects/example-app.md` points only to files that exist.
 - [ ] `./scripts/new_project.sh test-project /tmp/test-project` works in a scratch path.
 - [ ] `./scripts/self_test.sh` passes.
+- [ ] GitHub Actions self-test passes after push.
 - [ ] project examples are fictional.
 - [ ] README credits external agent catalogs or tools that influenced the workflow.
 - [ ] contributor docs explain how to validate first-run onboarding.
