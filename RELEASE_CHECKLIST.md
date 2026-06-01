@@ -6,6 +6,7 @@ Use this before publishing a public release.
 
 - [ ] README explains what Pulse is in the first screen.
 - [ ] `./bin/pulse` works from a fresh clone.
+- [ ] `./scripts/new_project.sh test-project /tmp/test-project` works in a scratch path.
 - [ ] `./scripts/self_test.sh` passes.
 - [ ] project examples are fictional.
 - [ ] scripts use relative paths derived from the repo root.

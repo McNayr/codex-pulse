@@ -27,3 +27,13 @@ Open Codex Pulse
 ```
 
 Codex should orient from written files first, not chat memory.
+
+## Add A Project
+
+Use:
+
+```bash
+./scripts/new_project.sh my-app ../my-app
+```
+
+Then edit the generated brief and add the project to `MISSION_BOARD.md`.

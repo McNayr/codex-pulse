@@ -54,7 +54,7 @@ Pulse is the front desk. Projects own the truth.
 Clone the repo into your workspace:
 
 ```bash
-git clone https://github.com/YOURNAME/codex-pulse.git
+git clone https://github.com/McNayr/codex-pulse.git
 cd codex-pulse
 ./bin/pulse
 ```
@@ -85,23 +85,14 @@ workspace/
   my-infra/
 ```
 
-Then add a project brief:
+Then scaffold a project:
 
 ```bash
-cp templates/PROJECT_BRIEF_TEMPLATE.md projects/my-app.md
+./scripts/new_project.sh my-app ../my-app
 ```
 
-Fill in the paths to your project docs, then add the project to
-`MISSION_BOARD.md`.
-
-For each project, create the handoff files:
-
-```bash
-cp templates/CURRENT_STATE_TEMPLATE.md ../my-app/CURRENT_STATE.md
-cp templates/SESSION_SAVE_TEMPLATE.md ../my-app/SESSION_SAVE.md
-cp templates/TODO_TEMPLATE.md ../my-app/TODO.md
-cp templates/CHRONOLOGY_TEMPLATE.md ../my-app/CHRONOLOGY.md
-```
+That creates a project brief under `projects/` and handoff files in your
+project folder. Fill in the brief, then add the project to `MISSION_BOARD.md`.
 
 Now future Codex sessions have a map instead of a haunted attic.
 
@@ -143,6 +134,7 @@ responsible for integration.
 ## Repository Layout
 
 - `bin/pulse`: portable startup command
+- `scripts/new_project.sh`: project scaffold helper
 - `START_HERE.md`: default session entry
 - `MISSION_BOARD.md`: active project registry
 - `WORKFLOW_RULES.md`: core operating rules

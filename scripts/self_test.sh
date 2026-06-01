@@ -24,6 +24,7 @@ check_file "$ROOT/SESSION_SHUTDOWN.md"
 check_file "$ROOT/DRIFT_DETECTION.md"
 check_file "$ROOT/AGENT_GUIDE.md"
 check_file "$ROOT/bin/pulse"
+check_file "$ROOT/scripts/new_project.sh"
 check_file "$ROOT/projects/example-app.md"
 check_file "$ROOT/templates/PROJECT_BRIEF_TEMPLATE.md"
 check_file "$ROOT/templates/CURRENT_STATE_TEMPLATE.md"
@@ -41,6 +42,21 @@ if "$ROOT/bin/pulse" >/dev/null; then
 else
   fail "pulse command failed"
 fi
+
+tmpdir="$(mktemp -d)"
+if "$ROOT/scripts/new_project.sh" test-project "$tmpdir/test-project" >/dev/null; then
+  pass "new_project command executed"
+else
+  fail "new_project command failed"
+fi
+
+check_file "$ROOT/projects/test-project.md"
+check_file "$tmpdir/test-project/CURRENT_STATE.md"
+check_file "$tmpdir/test-project/SESSION_SAVE.md"
+check_file "$tmpdir/test-project/TODO.md"
+check_file "$tmpdir/test-project/CHRONOLOGY.md"
+rm -f "$ROOT/projects/test-project.md"
+rm -rf "$tmpdir"
 
 if rg -n '/home/[[:alnum:]_-]+|/Users/[[:alnum:]_.-]+|C:\\Users\\[[:alnum:]_.-]+' "$ROOT" >/dev/null 2>&1; then
   fail "absolute user path scan matched"
