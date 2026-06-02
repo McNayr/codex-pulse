@@ -49,9 +49,14 @@ else
 fi
 
 tmpdir="$(mktemp -d)"
-self_test_name="pulse-self-test-$$"
+self_test_name="pulse-self-test-$(basename "$tmpdir" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]_-')"
 self_test_brief="$ROOT/projects/$self_test_name.md"
+created_self_test_brief=0
+if [ -e "$self_test_brief" ]; then
+  fail "self-test project brief collision: $self_test_brief"
+fi
 if "$ROOT/scripts/new_project.sh" "$self_test_name" "$tmpdir/test-project" >/dev/null; then
+  created_self_test_brief=1
   pass "new_project command executed"
 else
   fail "new_project command failed"
@@ -62,14 +67,20 @@ check_file "$tmpdir/test-project/CURRENT_STATE.md"
 check_file "$tmpdir/test-project/SESSION_SAVE.md"
 check_file "$tmpdir/test-project/TODO.md"
 check_file "$tmpdir/test-project/CHRONOLOGY.md"
-rm -f "$self_test_brief"
+if [ "$created_self_test_brief" -eq 1 ]; then
+  rm -f "$self_test_brief"
+fi
 rm -rf "$tmpdir"
 
 overwrite_tmpdir="$(mktemp -d)"
+overwrite_name="pulse-overwrite-test-$(basename "$overwrite_tmpdir" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]_-')"
+overwrite_brief="$ROOT/projects/$overwrite_name.md"
 printf 'do not overwrite\n' > "$overwrite_tmpdir/CURRENT_STATE.md"
-if "$ROOT/scripts/new_project.sh" "pulse-overwrite-test-$$" "$overwrite_tmpdir" >/dev/null 2>&1; then
+if [ -e "$overwrite_brief" ]; then
+  fail "overwrite test project brief collision: $overwrite_brief"
+elif "$ROOT/scripts/new_project.sh" "$overwrite_name" "$overwrite_tmpdir" >/dev/null 2>&1; then
   fail "new_project allowed overwrite"
-  rm -f "$ROOT/projects/pulse-overwrite-test-$$.md"
+  rm -f "$overwrite_brief"
 else
   pass "new_project refuses to overwrite existing handoff files"
 fi
