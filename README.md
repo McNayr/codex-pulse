@@ -79,10 +79,28 @@ Codex should read:
 
 Then it should ask what to resume, unless you already named the project.
 
+## Hermes Adapter
+
+Pulse also ships a small Hermes adapter that keeps the Codex-first workflow unchanged.
+
+Install it from the repository root:
+
+```bash
+./integrations/hermes/install_hermes_skill.sh
+```
+
+Then ask Hermes:
+
+```text
+Open Codex Pulse
+```
+
+The adapter lives under `integrations/hermes/` and teaches Hermes to follow the same Pulse startup, resume, and shutdown files. It does not make Hermes required for baseline Pulse usage.
+
 ## Prerequisites
 
-- Codex CLI or another Codex environment that can read local files and run shell
-  commands.
+- Codex CLI, Hermes Agent, or another coding-agent environment that can read
+  local files and run shell commands.
 - A Unix-like shell for the included scripts.
 - `rg` is recommended for the self-test and release scans.
 - Git is recommended if you want Pulse to act as a clean reference baseline.
@@ -177,6 +195,8 @@ the catalog.
 
 - `bin/pulse`: portable startup command
 - `scripts/new_project.sh`: project scaffold helper
+- `integrations/hermes/`: optional Hermes skill adapter
+- `AGENTS.md`: baseline instructions for coding agents
 - `START_HERE.md`: default session entry
 - `MISSION_BOARD.md`: active project registry
 - `WORKFLOW_RULES.md`: core operating rules

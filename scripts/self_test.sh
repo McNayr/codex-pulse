@@ -41,6 +41,11 @@ check_file "$ROOT/SECURITY.md"
 check_file "$ROOT/CHANGELOG.md"
 check_file "$ROOT/RELEASE_CHECKLIST.md"
 check_file "$ROOT/LICENSE"
+check_file "$ROOT/AGENTS.md"
+check_file "$ROOT/HERMES_COMPATIBILITY_PLAN.md"
+check_file "$ROOT/integrations/hermes/README.md"
+check_file "$ROOT/integrations/hermes/install_hermes_skill.sh"
+check_file "$ROOT/integrations/hermes/skills/codex-pulse/SKILL.md"
 
 if "$ROOT/bin/pulse" >/dev/null; then
   pass "pulse command executed"
