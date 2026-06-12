@@ -25,6 +25,7 @@ check_file "$ROOT/DRIFT_DETECTION.md"
 check_file "$ROOT/AGENT_GUIDE.md"
 check_file "$ROOT/bin/pulse"
 check_file "$ROOT/scripts/new_project.sh"
+check_file "$ROOT/scripts/context_packet.py"
 check_file "$ROOT/projects/example-app.md"
 check_file "$ROOT/examples/example-app/README.md"
 check_file "$ROOT/examples/example-app/CURRENT_STATE.md"
@@ -46,11 +47,35 @@ check_file "$ROOT/HERMES_COMPATIBILITY_PLAN.md"
 check_file "$ROOT/integrations/hermes/README.md"
 check_file "$ROOT/integrations/hermes/install_hermes_skill.sh"
 check_file "$ROOT/integrations/hermes/skills/codex-pulse/SKILL.md"
+check_file "$ROOT/integrations/messaging/SESSION_CONTINUITY.md"
 
 if "$ROOT/bin/pulse" >/dev/null; then
   pass "pulse command executed"
 else
   fail "pulse command failed"
+fi
+
+packet_output="$(python3 "$ROOT/scripts/context_packet.py" --workspace "$ROOT" --project example-app --format markdown 2>/dev/null || true)"
+if printf '%s\n' "$packet_output" | rg -q 'Codex Pulse Context Packet'; then
+  pass "context packet command executed"
+else
+  fail "context packet command failed"
+fi
+if printf '%s\n' "$packet_output" | rg -q 'projects/example-app.md'; then
+  pass "context packet includes project brief pointer"
+else
+  fail "context packet missing project brief pointer"
+fi
+if printf '%s\n' "$packet_output" | rg -q '/home/'; then
+  fail "context packet leaked private absolute path"
+else
+  pass "context packet avoids private absolute paths"
+fi
+
+if rg -q 'per-message event ids' "$ROOT/integrations/messaging/SESSION_CONTINUITY.md"; then
+  pass "messaging continuity guide documents stable session keys"
+else
+  fail "messaging continuity guide missing stable session-key guidance"
 fi
 
 tmpdir="$(mktemp -d)"

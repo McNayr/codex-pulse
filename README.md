@@ -97,6 +97,8 @@ Open Codex Pulse
 
 The adapter lives under `integrations/hermes/` and teaches Hermes to follow the same Pulse startup, resume, and shutdown files. It does not make Hermes required for baseline Pulse usage.
 
+Pulse also keeps agent-neutral notes for messaging adapters under `integrations/messaging/`. Start with [`SESSION_CONTINUITY.md`](./integrations/messaging/SESSION_CONTINUITY.md) when chat/mobile access feels more circular or expensive than the CLI; the key pattern is to keep one stable conversation lane unless the human explicitly opens a new thread or topic.
+
 ## Prerequisites
 
 - Codex CLI, Hermes Agent, or another coding-agent environment that can read
