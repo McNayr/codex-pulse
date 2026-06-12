@@ -48,6 +48,7 @@ check_file "$ROOT/integrations/hermes/README.md"
 check_file "$ROOT/integrations/hermes/install_hermes_skill.sh"
 check_file "$ROOT/integrations/hermes/skills/codex-pulse/SKILL.md"
 check_file "$ROOT/integrations/messaging/SESSION_CONTINUITY.md"
+check_file "$ROOT/integrations/messaging/CLI_LIKE_PROFILE.md"
 
 if "$ROOT/bin/pulse" >/dev/null; then
   pass "pulse command executed"
@@ -76,6 +77,13 @@ if rg -q 'per-message event ids' "$ROOT/integrations/messaging/SESSION_CONTINUIT
   pass "messaging continuity guide documents stable session keys"
 else
   fail "messaging continuity guide missing stable session-key guidance"
+fi
+if rg -q 'Messenger CLI-like Profile' "$ROOT/integrations/messaging/CLI_LIKE_PROFILE.md" \
+  && rg -q 'new topic' "$ROOT/integrations/messaging/CLI_LIKE_PROFILE.md" \
+  && rg -q 'checkpoint' "$ROOT/integrations/messaging/CLI_LIKE_PROFILE.md"; then
+  pass "messaging CLI-like profile documents mobile controls"
+else
+  fail "messaging CLI-like profile missing mobile controls"
 fi
 
 tmpdir="$(mktemp -d)"
