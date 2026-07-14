@@ -16,28 +16,24 @@ Use this profile when Hermes is reachable from Matrix/Telegram/Discord/SMS or an
 - `checkpoint`: write a durable handoff before the thread gets large or the operator goes AFK.
 - `status`: report compact session/usage state before broad rereads.
 
-## Matrix-specific continuity check
+## Messenger-specific continuity check
 
-If Matrix feels circular or expensive, compare recent sessions before changing project logic:
+If a messenger lane feels circular or expensive, compare recent sessions before changing project logic. Adapter-specific diagnostics should answer:
 
-```bash
-python -m hermes_bag.cli matrix-sessions --limit 8 --format markdown
-```
+- which stable user, room, channel, or thread key was used;
+- whether consecutive top-level messages updated the same recent session;
+- whether the adapter accidentally keyed sessions by per-message event id;
+- whether short turns used a small number of API calls.
 
-Healthy behavior after the stable-lane fix:
+Healthy behavior:
 
-- consecutive top-level Matrix messages update the same recent session
-- batch/session keys are stable per user or room, not per event id
-- short turns use a small number of API calls
+- consecutive top-level messages update the same recent session;
+- batch/session keys are stable per user or room, not per event id;
+- short turns use a small number of API calls.
 
 ## Runtime profile
 
-The private Hermes bag implementation can stage the local profile with:
-
-```bash
-python -m hermes_bag.cli messenger-profile --env ~/.hermes/.env --apply --format markdown
-```
-
-Then restart the gateway so the environment is reloaded.
-
-Public Pulse does not ship private credentials, service files, or platform-specific room ids; treat this document as the agent-neutral behavior contract.
+Adapter implementations can stage equivalent local settings in their own config,
+then reload the adapter service if needed. Public Pulse does not ship private
+credentials, service files, local config paths, or platform-specific room ids;
+treat this document as the agent-neutral behavior contract.

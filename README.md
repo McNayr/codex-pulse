@@ -79,6 +79,94 @@ Codex should read:
 
 Then it should ask what to resume, unless you already named the project.
 
+For a compact, agent-neutral orientation before opening broader files, run:
+
+```bash
+python3 ./scripts/context_packet.py --workspace . --format markdown
+```
+
+The packet uses workspace-relative paths and accepts `--project <brief-name>`
+for focused resumes.
+
+For deterministic local lookup across Pulse markdown, build or query the portable
+workspace-relative index:
+
+```bash
+python3 ./scripts/doc_index.py --workspace . --index .pulse-index.json "startup packet" --format markdown
+```
+
+To classify startup/source tiers before opening broad docs, run the portable
+audit helper:
+
+```bash
+python3 ./scripts/startup_audit.py --workspace . --format markdown
+```
+
+Use the report as a read policy: `root-policy` is policy-only, `registry` is
+packet input, `project-brief` is selected-brief, and `reference` is query-first.
+The helper emits workspace-relative paths only and does not read agent logs,
+private auth, or machine-specific runtime state.
+
+When a session is heading into a risky context window, handoff, reboot, or AFK
+closeout, write a compact file-backed checkpoint without requiring any agent-
+specific runtime:
+
+```bash
+python3 ./scripts/session_checkpoint.py \
+  --target . \
+  --active-task "Current task" \
+  --completed "What changed" \
+  --modified-file "relative/path.md" \
+  --verification "Command output summary" \
+  --next-file "START_HERE.md" \
+  --next-step "Exact next action" \
+  --format markdown
+```
+
+The checkpoint writer emits `SESSION_CONTEXT_CHECKPOINT.md` and keeps summary
+output workspace-relative.
+
+For adapter-provided usage/log signals, evaluate a portable no-auth status policy
+before deciding whether to fan out agents or checkpoint first:
+
+```bash
+python3 ./scripts/status_policy.py --usage-mode normal --log-risk watch --format markdown
+```
+
+Adapters should pass sanitized modes only (`normal|caution|conserve|critical|exhausted`
+for usage and `clean|watch|critical` for logs). Pulse does not read private auth,
+agent logs, or machine-specific paths.
+
+For sanitized cost fixtures exported by an adapter, summarize repeated operations,
+token totals, timeout counts, and failure counts without reading private runtime
+logs directly:
+
+```bash
+python3 ./scripts/log_cost_summary.py --jsonl sanitized-log-cost.jsonl --format markdown
+```
+
+Fixture records are JSON objects such as `{ "key": "startup", "input_tokens": 100,
+"output_tokens": 25, "duration_ms": 1200 }`; adapter-specific log paths and
+secrets should be removed before they reach Pulse.
+
+For captured/sanitized rate-limit event fixtures, summarize the latest
+`codex.rate_limits` snapshot offline without opening live streams or reading
+private auth files:
+
+```bash
+python3 ./scripts/rate_limit_snapshot.py --file sanitized-rate-events.sse --format markdown
+```
+
+Adapters should export only replay-safe SSE/JSONL fixture data. Pulse reports the
+most constrained remaining window and maps it to `NORMAL`, `CAUTION`,
+`CONSERVE`, or `CRITICAL` guidance.
+
+Adapter authors should follow the fixture contract in
+[`integrations/adapters/TELEMETRY_FIXTURES.md`](./integrations/adapters/TELEMETRY_FIXTURES.md):
+collect live runtime facts in the adapter, sanitize them into tiny replay-safe
+fixtures or normalized modes, and keep Pulse core scripts independent from
+provider auth, private logs, and machine-specific paths.
+
 ## Hermes Adapter
 
 Pulse also ships a small Hermes adapter that keeps the Codex-first workflow unchanged.
